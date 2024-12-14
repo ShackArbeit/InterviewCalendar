@@ -63,13 +63,16 @@ const currentMonthLabel = getMonthDropdownOptions().find(option => option.value 
 const currentYearLabel = getYearDropdownOptions(year).find(option => option.value === year).label;
 return (
     <div className="calendar-root">
-      <div className="navigation-header">
-        <div className="month-nav-arrow-buttons">
-          <button onClick={handleMonthNavBackButtonClick}> prev </button>
-          <h1>{currentMonthLabel}</h1>
-          <button onClick={handleMonthNavForwardButtonClick}>next</button>
-        </div>
-        <h1>{currentYearLabel}</h1>
+      <div className="navigation-header"> 
+          <button onClick={handleMonthNavBackButtonClick}
+            className='clickButton'
+          > ⭠ </button>
+          <div className='headerContainer'>
+            <label>{currentYearLabel}年{currentMonthLabel}月</label>
+          </div>     
+          <button onClick={handleMonthNavForwardButtonClick}
+           className='clickButton'
+          >⭢</button>  
       </div>
       <div className="days-of-week">
         {daysOfWeek.map((day, index) => (

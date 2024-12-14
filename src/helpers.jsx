@@ -7,13 +7,13 @@ dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
 
 export const daysOfWeek=[
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thur",
+    "Fri",
+    "Sat"
 ]
 
 // Based on the given date string, returns the day of the week corresponding to the date (expressed as a number, starting from Monday)
@@ -41,7 +41,7 @@ export function getMonthDropdownOptions(){
           label:dayjs()
         // The .month() method of dayjs accepts an index value from 0 (January) to 11 (December), so m - 1 is used here to convert the numeric format of m (1 to 12) into a 0-based index value.
               .month(m-1)
-              .format('MMMM')
+              .format('MM')
      }))
 }
 
