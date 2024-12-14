@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween';
 import { useState } from "react";
+dayjs.extend(isBetween)
 import {
   daysOfWeek,
   createDaysForCurrentMonth,
@@ -19,12 +22,13 @@ Calendar.propTypes = {
 };
 export default function Calendar({
   className = "",
-  yearAndMonth = [2021, 6],
+  yearAndMonth = [2024, 12],
   onYearAndMonthChange,
   renderDay = () => null
 }) {
   const [year, month] = yearAndMonth;
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   let currentMonthDays = createDaysForCurrentMonth(year, month);
   let previousMonthDays = createDaysForPreviousMonth(
     year,
@@ -38,6 +42,24 @@ export default function Calendar({
     ...nextMonthDays
   ];
 
+  const handleDayClick = (dateString) => {
+    if (startDate === dateString) {
+      // If the clicked date is the same as the start date reset select state 
+      setStartDate(null);
+      setEndDate(null);
+    } else if (!startDate || dayjs(dateString).isBefore(dayjs(startDate))) {
+      // If there is no start date or the selected date is earlier than the start date, reset the start date
+      setStartDate(dateString);
+      setEndDate(null); // Reset end date
+    } else if (!endDate || dayjs(dateString).isAfter(dayjs(startDate))) {
+      // If there is no end date or the selected date is later than the start date, set as the end date
+      setEndDate(dateString);
+    } else if (dateString === endDate) {
+      // If the clicked date is the same as the end date, reset both
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
 
   const handleMonthNavBackButtonClick = () => {
     let nextYear = year;
@@ -85,15 +107,23 @@ return (
             {day}
           </div>
         ))}
-      </div>
+      </div> 
       <div className="days-grid">
         {calendarGridDayObjects.map((day) => (
           <div
             key={day.dateString}
             className={classNames("day-grid-item-container", {
               "weekend-day": isWeekendDay(day.dateString),
-              "current-month": day.isCurrentMonth
+              "current-month": day.isCurrentMonth,
+              today: day.dateString === dayjs().format("YYYY-MM-DD"),
+              "start-date": day.dateString === startDate, // start date style
+              "end-date": day.dateString === endDate, //end date style
+              "selected-range":
+                startDate &&
+                endDate &&
+                dayjs(day.dateString).isBetween(startDate, endDate, null, "[]"), //Select range style
             })}
+            onClick={() => handleDayClick(day.dateString)}
           >
             <div className="day-content-wrapper">{renderDay(day)}</div>
           </div>
