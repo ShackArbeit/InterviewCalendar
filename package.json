@@ -1,11 +1,13 @@
 {
   "name": "test",
+  "homepage":"https://ShackArbeit/github.io/InterviewCalendar",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "predeploy":"npm run build",
+    "build": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
